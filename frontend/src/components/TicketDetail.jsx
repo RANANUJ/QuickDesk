@@ -2,8 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { User, Send } from 'lucide-react';
 import { DB } from '../utils/mockDB';
 import Spinner from './Spinner';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const TicketDetail = ({ ticketId, user, setPage }) => {
+const TicketDetail = ({ user }) => {
+    const { ticketId } = useParams();
+    const navigate = useNavigate();
     const [ticket, setTicket] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -59,7 +62,7 @@ const TicketDetail = ({ ticketId, user, setPage }) => {
     return (
         <div className="container mx-auto p-4 sm:p-6 lg:p-8">
             <button 
-                onClick={() => setPage('dashboard')} 
+                onClick={() => navigate('/dashboard')} 
                 className="mb-4 text-blue-600 dark:text-blue-400 hover:underline"
             >
                 &larr; Back to Dashboard

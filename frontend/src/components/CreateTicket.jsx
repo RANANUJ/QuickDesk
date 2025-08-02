@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { DB } from '../utils/mockDB';
 import Spinner from './Spinner';
+import { useNavigate } from 'react-router-dom';
 
-const CreateTicket = ({ user, setPage }) => {
+const CreateTicket = ({ user }) => {
+    const navigate = useNavigate();
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
@@ -45,7 +47,7 @@ const CreateTicket = ({ user, setPage }) => {
                 createdBy: user.id,
                 creatorName: user.email,
             });
-            setPage('dashboard');
+            navigate('/dashboard');
         } catch (err) {
             setError('Failed to create ticket. Please try again.');
             setSubmitting(false);
@@ -114,7 +116,7 @@ const CreateTicket = ({ user, setPage }) => {
                     <div className="flex justify-end space-x-4">
                         <button 
                             type="button" 
-                            onClick={() => setPage('dashboard')} 
+                            onClick={() => navigate('/dashboard')} 
                             disabled={submitting}
                             className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-60"
                         >

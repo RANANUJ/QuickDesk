@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import Spinner from './Spinner';
 import { DB } from '../utils/mockDB';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Auth = ({ setPage, onLoginSuccess }) => {
-    const [isLogin, setIsLogin] = useState(true);
+const Auth = ({ isRegister = false, onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setLoading(true);
-        if (isLogin) {
+        if (!isRegister) {
             const user = await DB.findUserByEmail(email);
             if (user && user.password === password) { 
-                onLoginSuccess(user); 
+                onLoginSuccess(user);
+                navigate('/dashboard');
             } else { 
                 setError('Invalid email or password.'); 
             }
@@ -26,7 +28,8 @@ const Auth = ({ setPage, onLoginSuccess }) => {
                 setError('User with this email already exists.'); 
             } else { 
                 const newUser = await DB.addUser({ email, password, role: 'user' }); 
-                onLoginSuccess(newUser); 
+                onLoginSuccess(newUser);
+                navigate('/dashboard');
             }
         }
         setLoading(false);
@@ -37,7 +40,7 @@ const Auth = ({ setPage, onLoginSuccess }) => {
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-                        {isLogin ? 'Sign in to your account' : 'Create a new account'}
+                        {!isRegister ? 'Sign in to your account' : 'Create a new account'}
                     </h2>
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -74,17 +77,17 @@ const Auth = ({ setPage, onLoginSuccess }) => {
                             disabled={loading} 
                             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300"
                         >
-                            {loading ? <Spinner /> : (isLogin ? 'Sign in' : 'Register')}
+                            {loading ? <Spinner /> : (!isRegister ? 'Sign in' : 'Register')}
                         </button>
                     </div>
                 </form>
                 <div className="text-sm text-center">
-                    <button 
-                        onClick={() => { setIsLogin(!isLogin); setError(''); }} 
+                    <Link 
+                        to={!isRegister ? '/register' : '/login'}
                         className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                     >
-                        {isLogin ? 'Don\'t have an account? Register' : 'Already have an account? Sign in'}
-                    </button>
+                        {!isRegister ? 'Don\'t have an account? Register' : 'Already have an account? Sign in'}
+                    </Link>
                 </div>
             </div>
         </div>

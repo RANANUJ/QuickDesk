@@ -3,8 +3,10 @@ import { PlusCircle, Search } from 'lucide-react';
 import { DB } from '../utils/mockDB';
 import Spinner from './Spinner';
 import Ticket from './Ticket';
+import { useNavigate } from 'react-router-dom';
 
-const Dashboard = ({ user, setPage, setSelectedTicketId }) => {
+const Dashboard = ({ user, setSelectedTicketId }) => {
+    const navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
@@ -45,12 +47,12 @@ const Dashboard = ({ user, setPage, setSelectedTicketId }) => {
     };
 
     const handleCreateTicket = () => {
-        setPage('create-ticket');
+        navigate('/create-ticket');
     };
 
     const handleTicketClick = (ticketId) => {
-        setSelectedTicketId(ticketId);
-        setPage('ticket-detail');
+        setSelectedTicketId && setSelectedTicketId(ticketId);
+        navigate(`/ticket/${ticketId}`);
     };
 
     const filteredAndSortedTickets = useMemo(() => {
