@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { DB } from '../../utils/mockDB';
-import { Spinner } from '../Spinner/Spinner';
+import Spinner from './Spinner';
+import { DB } from '../utils/mockDB';
 
 const Auth = ({ setPage, onLoginSuccess }) => {
     const [isLogin, setIsLogin] = useState(true);
